@@ -46,7 +46,7 @@ client = MultiServerMCPClient(
                     "transport" : "stdio",
                     "command" : r"C:\Users\pawar\Desktop\Agentic AI Travel Planner\aviationstack-mcp\.venv\Scripts\python.exe",
                     "args" :[
-                        r"C:\Users\pawar\Desktop\Agentic AI Travel Planner\custom_whether_mcp_server.py"
+                        r"C:\Users\pawar\Desktop\Agentic AI Travel Planner\Custom_MCP_Servers\custom_whether_mcp_server.py"
                         ],
                     "env" : {
                         "OPENWHETHER_API_KEY" : OPENWHETHER_API_KEY
