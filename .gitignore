@@ -10,3 +10,5 @@ wheels/
 .venv
 .env 
 travel_plans/
+tests/
+aviationstak-mcp/
