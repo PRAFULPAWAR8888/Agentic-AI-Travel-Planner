@@ -1,4 +1,5 @@
 import os
+
 from typing import TypedDict, Annotated
 import operator
 import asyncio
@@ -150,13 +151,13 @@ def flight_agent(state: TravelState):
         
         airports = asyncio.run(
             aviation_mcp_call(
-                "list_airports"
+                "list_airports", {}
             )
         )
         
         airlines = asyncio.run(
             aviation_mcp_call(
-                "list_airlines"
+                "list_airlines", {}
             )
         )
         
@@ -232,7 +233,20 @@ def weather_agent(state : TravelState):
     
     return {
         "weather_results" : f"""
-        Current Weather : {weather_data}"""
+        Current Weather : 
+        {weather_data}
+        
+        Forecast:
+        {forecast_data}""",
+        
+        
+        
+        "messages": [
+            AIMessage(
+                content="Weather information fetched successfully"
+            )
+        ],
+        "llm_calls": state.get("llm_calls", 0) + 1
         
     }
 

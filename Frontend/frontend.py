@@ -1,14 +1,23 @@
 import os
+import sys
+PROJECT_ROOT = os.path.dirname(
+    os.path.dirname(os.path.abspath(__file__))
+)
+
+sys.path.insert(0, PROJECT_ROOT)
 import streamlit as st
 from datetime import datetime
 from langchain_core.messages import HumanMessage
-from main import app
+from app.main import app
 
 st.set_page_config(
     page_title="AI Travel Booking System",
     page_icon="✈️",
     layout="wide"
 )
+
+
+
 
 st.markdown("""
 <style>
@@ -313,7 +322,7 @@ with st.sidebar:
         st.markdown(f"<div class='sidebar-chip'>{tech}</div>", unsafe_allow_html=True)
 
     st.markdown("<div class='sidebar-title'>Agent Pipeline</div>", unsafe_allow_html=True)
-    for step in ["① Flight Agent", "② Hotel Agent", "③ Itinerary Agent", "④ Final Agent"]:
+    for step in ["① Flight Agent", "② Hotel Agent", "③ Weather Agent", "④Itinerary Agent"]:
         st.markdown(f"<div class='sidebar-chip'>{step}</div>", unsafe_allow_html=True)
 
 # ── Hero ──────────────────────────────────────────────────────────────────────
@@ -377,8 +386,8 @@ generate = st.button("🚀  Generate My Travel Plan", use_container_width=True)
 AGENT_META = {
     "flight_agent":    ("✈️", "Flight Agent"),
     "hotel_agent":     ("🏨", "Hotel Agent"),
-    "itinerary_agent": ("🗓️", "Itinerary Agent"),
-    "final_agent":     ("🧠", "Final Agent"),
+    "weather_agent":   ("🌤️", "Weather Agent"),
+    "itinerary_agent":  ("🗓️", "Itinerary Agent"),
 }
 
 if generate:
@@ -419,17 +428,19 @@ if generate:
                         collected["hotel_results"] = text
                         st.markdown(text or "_No hotel data returned._")
 
+                    elif node_name == "weather_agent":
+                       text = state_update.get("weather_results", "")
+                       collected["weather_results"] = text
+                       st.markdown(text or "_No weather data returned._")
+                    
+                    
+                    
                     elif node_name == "itinerary_agent":
                         text = state_update.get("itinerary", "")
                         collected["itinerary"] = text
                         st.markdown(text or "_No itinerary generated._")
 
-                    elif node_name == "final_agent":
-                        msgs = state_update.get("messages", [])
-                        text = msgs[-1].content if msgs else ""
-                        collected["final_response"] = text
-                        st.markdown(text or "_No final response._")
-
+                   
                     collected["llm_calls"] = state_update.get("llm_calls", collected["llm_calls"])
 
         # Metrics
@@ -442,10 +453,10 @@ if generate:
         """, unsafe_allow_html=True)
 
         # Final plan card
-        if collected["final_response"]:
+        if collected["itinerary"]:
             st.markdown("<div class='sec-head'><span>🧠 Final Travel Plan</span></div>",
                         unsafe_allow_html=True)
-            st.markdown(f"<div class='final-card'>{collected['final_response']}</div>",
+            st.markdown(f"<div class='final-card'>{collected['itinerary']}</div>",
                         unsafe_allow_html=True)
 
         # Save
@@ -471,13 +482,13 @@ if generate:
 
 ---
 
-## 🗓️ Itinerary
-{collected['itinerary'] or 'N/A'}
+## 🌤️ weather_results
+{collected['weather_results'] or 'N/A'}
 
 ---
 
-## 🧠 Final Travel Plan
-{collected['final_response'] or 'N/A'}
+## 🗓️ Itinerary
+{collected['itinerary'] or 'N/A'}
 
 ---
 *LLM Calls: {collected['llm_calls']}*

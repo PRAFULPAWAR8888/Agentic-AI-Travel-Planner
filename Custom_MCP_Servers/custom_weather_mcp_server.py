@@ -10,7 +10,7 @@ mcp = FastMCP("Wheather Server")
 OPENWHETHER_API_KEY = os.getenv("OPENWHETHER_API_KEY")
 
 @mcp.tool()
-def get_current_wheather(city : str):
+def get_current_weather(city : str):
     
     response = requests.get(
         "https://api.openweathermap.org/data/2.5/weather",

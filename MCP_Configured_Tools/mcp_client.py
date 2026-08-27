@@ -46,7 +46,7 @@ client = MultiServerMCPClient(
                     "transport" : "stdio",
                     "command" : r"C:\Users\pawar\Desktop\Agentic AI Travel Planner\aviationstack-mcp\.venv\Scripts\python.exe",
                     "args" :[
-                        r"C:\Users\pawar\Desktop\Agentic AI Travel Planner\Custom_MCP_Servers\custom_whether_mcp_server.py"
+                        r"C:\Users\pawar\Desktop\Agentic AI Travel Planner\Custom_MCP_Servers\custom_weather_mcp_server.py"
                         ],
                     "env" : {
                         "OPENWHETHER_API_KEY" : OPENWHETHER_API_KEY
@@ -119,7 +119,7 @@ async def aviation_mcp_call(tool_name: str, tool_args: dict):
         t for t in tools
         if t.name == tool_name
     )
-    result = await tool.ainovke(
+    result = await tool.ainvoke(
         tool_args or {}
     )
     return result
@@ -131,12 +131,12 @@ async def get_airports():
     if not tool:
         return "Airport tool unavailable"
     
-    result = await tool.ainovke({})
+    result = await tool.ainvoke({})
     return result
 
 async def get_airlines():
     await initialize_mcp()
-    tool = aviation_tools.get("list_arilines")
+    tool = aviation_tools.get("list_airlines")
     if not tool:
         return "Airline tool unavailable"
     
@@ -164,7 +164,7 @@ async def initialize_weather_tools():
     
     weather_tool = next(
         t for t in tools 
-        if t.name == "get_current_wheather"
+        if t.name == "get_current_weather"
     )
     
     forecast_tool = next(
