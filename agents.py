@@ -174,7 +174,67 @@ def flight_agent(state : TravelState):
     Airline MCP data:
     {str(airlines)[:3000]}
     
-    Include likely departure/arrival airports, rele
+    Include likely departure/arrival airports, relevant airlines,
+    estimated durtion, fare range, peak season warnings, and booking advice.
     
     """
+    result = _llm_text("You are a flight planning expert.", prompt)
     
+    print("\n ====== FLIGHT AGENT LLM RESPONSE =====")
+    print(result)
+    print("==========================================\n")   
+    
+    return {
+        "flight_results" : result,
+        "messages" : [AIMessage(content="Flight agent completed its task.")],
+        "llm_calls" : state.get("llm_calls", 0) + 1,
+        
+    }
+    
+
+def hotel_agent(state : TravelState):
+    query  = f" Best hotels and areas to stay for: {state['user_query']}"
+    print("\n ====== HOTEL AGENT INPUT ===== ")
+    print("Query:", query)
+    print("===================================")
+
+    result =  asyncio.run(tavily_mcp_search(query))
+    
+    return {
+        "hotel_results" : str(result),
+        "messages" : [AIMessage(content="Hotel agent completed its task.")],
+        "llm_calls" : state.get("llm_calls",0) + 1
+    }
+    
+def weather_agent(state : TravelState):
+    constraints = state["trip_constraints"]
+    city = constraints["destination"]
+    
+    print("\n ====== WEATHER AGENT INPUT ===== ")
+    print("City:", city)
+    print("===================================")
+    
+    weather_data = asyncio.run(weather_mcp_search(city))
+    forecast_data = asyncio.run(forecast_mcp_search(city))
+    
+    print("\n ====== Current Weather===== ")
+    print(weather_data)
+    print("===================================")
+    
+    print("\n ====== Forecast Weather===== ")
+    print(forecast_data)
+    print("===================================")
+    
+    result = f"""
+    Current Weather:
+    {weather_data}
+
+    Forecast Weather:
+    {forecast_data}
+    """
+    return {
+        "weather_results": result,
+        "messages": [AIMessage(content="Weather agent completed its task.")]
+    }
+
+def budget_agent(state : TravelState):
