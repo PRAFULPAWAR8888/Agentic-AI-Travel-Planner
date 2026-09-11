@@ -14,6 +14,21 @@ llm = ChatOpenAI(
        api_key=os.getenv("OPENAI_API_KEY")
 )
 
+import os
+import sys
+
+APP_PYTHON = sys.executable
+AVIATION_PYTHON = sys.executable
+
+if os.getenv("DOCKER_ENV") == "true":
+    AVIATION_COMMAND = sys.executable
+    WEATHER_COMMAND = sys.executable
+    WEATHER_SERVER = "/app/Custom_MCP_Servers/custom_weather_mcp_server.py"
+else:
+    AVIATION_COMMAND = r"C:\Users\pawar\Desktop\Agentic AI Travel Planner\aviationstack-mcp\.venv\Scripts\python.exe"
+    WEATHER_COMMAND = r"C:\Users\pawar\Desktop\Agentic AI Travel Planner\aviationstack-mcp\.venv\Scripts\python.exe"
+    WEATHER_SERVER = r"C:\Users\pawar\Desktop\Agentic AI Travel Planner\Custom_MCP_Servers\custom_weather_mcp_server.py"
+
 client = MultiServerMCPClient(
     {
         # Remote Mcp server
@@ -26,7 +41,7 @@ client = MultiServerMCPClient(
         
         "aviationstack": {
                     "transport": "stdio",
-                    "command": r"C:\Users\pawar\Desktop\Agentic AI Travel Planner\aviationstack-mcp\.venv\Scripts\python.exe",
+                    "command": AVIATION_COMMAND,
                     "args": [
                         "-m",
                         "aviationstack_mcp",
@@ -44,9 +59,9 @@ client = MultiServerMCPClient(
         
         "weather" : {
                     "transport" : "stdio",
-                    "command" : r"C:\Users\pawar\Desktop\Agentic AI Travel Planner\aviationstack-mcp\.venv\Scripts\python.exe",
+                    "command" : WEATHER_COMMAND,
                     "args" :[
-                        r"C:\Users\pawar\Desktop\Agentic AI Travel Planner\Custom_MCP_Servers\custom_weather_mcp_server.py"
+                        WEATHER_SERVER
                         ],
                     "env" : {
                         "OPENWHETHER_API_KEY" : OPENWHETHER_API_KEY

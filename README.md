@@ -130,7 +130,7 @@ Fronted/
 
 ## Data and API notes
 
-- Flight and airline information comes from AviationStack MCP tools.
+
 - Hotel research uses Tavily's remote MCP endpoint.
 - Weather data comes from OpenWeather's current-weather and forecast endpoints.
 - API responses are used as planning inputs; fares, availability, weather, and hotel information should be verified with the provider before booking.
