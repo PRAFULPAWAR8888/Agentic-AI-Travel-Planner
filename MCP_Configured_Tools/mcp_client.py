@@ -20,14 +20,17 @@ import sys
 APP_PYTHON = sys.executable
 AVIATION_PYTHON = sys.executable
 
-if os.getenv("DOCKER_ENV") == "true":
-    AVIATION_COMMAND = sys.executable
-    WEATHER_COMMAND = sys.executable
-    WEATHER_SERVER = "/app/Custom_MCP_Servers/custom_weather_mcp_server.py"
-else:
+if os.name == "nt":
+    # Windows - local development
     AVIATION_COMMAND = r"C:\Users\pawar\Desktop\Agentic AI Travel Planner\aviationstack-mcp\.venv\Scripts\python.exe"
     WEATHER_COMMAND = r"C:\Users\pawar\Desktop\Agentic AI Travel Planner\aviationstack-mcp\.venv\Scripts\python.exe"
     WEATHER_SERVER = r"C:\Users\pawar\Desktop\Agentic AI Travel Planner\Custom_MCP_Servers\custom_weather_mcp_server.py"
+
+else:
+    # Linux - Streamlit Cloud
+    AVIATION_COMMAND = sys.executable
+    WEATHER_COMMAND = sys.executable
+    WEATHER_SERVER = "/mount/src/agentic-ai-travel-planner/Custom_MCP_Servers/custom_weather_mcp_server.py"
 
 client = MultiServerMCPClient(
     {
