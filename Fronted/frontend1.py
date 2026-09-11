@@ -4,7 +4,12 @@ import streamlit as st
 from langchain_core.messages import HumanMessage
 from langgraph.types import Command
 
+import sys
+import os
+
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from Graphs.graph import app
+
 
 
 st.set_page_config(page_title="Real-World Multi-Agent Travel Planner", layout="wide")
